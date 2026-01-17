@@ -81,3 +81,44 @@ def count_valid_emails(emails):
 
     return count
 ```
+
+## Task 3 Assumptions
+
+- All non-`None` values provided to `average_valid_measurements` are guaranteed to be valid numeric inputs convertible to `float`.
+- Input validation is performed upstream, so defensive type checking inside the function is intentionally minimized.
+- Returning `0.0` for empty input or when no valid measurements exist is an acceptable business default.
+
+## Known Limitations
+
+- If non-numeric, non-`None` values are passed despite the assumption, the function will raise a runtime exception.
+- Boolean values are treated as numeric due to Python’s type system.
+
+## Alternative Implementation Considered
+
+A more defensive version was considered that safely ignores invalid numeric inputs using exception handling:
+
+```python
+def average_valid_measurements(values):
+    if not values:
+        return 0.0
+
+    total = 0.0
+    valid_count = 0
+
+    for value in values:
+        if value is None:
+            continue
+
+        try:
+            number = float(value)
+        except (TypeError, ValueError):
+            continue
+
+        total += number
+        valid_count += 1
+
+    if valid_count == 0:
+        return 0.0
+
+    return total / valid_count
+```

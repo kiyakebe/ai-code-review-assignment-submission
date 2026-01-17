@@ -162,27 +162,39 @@ See `correct_task2.py`
 
 ---
 
-# Task 3 — Aggregate Valid Measurements
+## Task 3 — Aggregate Valid Measurements
+
+---
 
 ## 1) Code Review Findings
 
 ### Critical bugs
 
--
+- The original implementation divides by the total number of input values instead of the number of valid measurements, producing incorrect averages.
+- A `ZeroDivisionError` can occur when all values are `None`.
 
 ### Edge cases & risks
 
--
+- Empty input lists are not handled safely.
+- Non-numeric values can cause runtime failures in the original code.
+- Boolean values may be unintentionally treated as numeric measurements.
 
 ### Code quality / design issues
 
--
+- The variable `count` in the original code does not represent the number of averaged values.
+- Input assumptions are implicit and undocumented.
+- Error handling logic obscures the intended data contract.
+
+---
 
 ## 2) Proposed Fixes / Improvements
 
 ### Summary of changes
 
--
+- Average only valid, non-`None` measurements.
+- Explicitly track the count of valid values.
+- Guard against empty input and empty valid sets.
+- Simplify numeric conversion based on a stricter input contract.
 
 ### Corrected code
 
@@ -190,24 +202,36 @@ See `correct_task3.py`
 
 ### Testing Considerations
 
-If you were to test this function, what areas or scenarios would you focus on, and why?
+- Empty list input.
+- Lists containing only `None`.
+- Mixed numeric types (int, float).
+- Large numeric values.
+- Lists guaranteed to contain only numeric or `None` values, per assumption.
+
+---
 
 ## 3) Explanation Review & Rewrite
 
 ### AI-generated explanation (original)
 
-> This function calculates the average of valid measurements by ignoring missing values (None) and averaging the remaining values. It safely handles mixed input types and ensures an accurate average
+> This function calculates the average of valid measurements by ignoring missing values (None) and averaging the remaining values. It safely handles mixed input types and ensures an accurate average.
 
 ### Issues in original explanation
 
--
+- Claims safe handling of mixed input types, which is not true.
+- Does not mention division-by-zero risk.
+- Overstates correctness of the averaging logic.
 
 ### Rewritten explanation
 
--
+- This function computes the average of numeric measurements by ignoring `None` values and averaging the remaining entries. It assumes all non-`None` values are valid numeric inputs and safely handles empty input by returning zero.
+
+---
 
 ## 4) Final Judgment
 
-- Decision: Approve / Request Changes / Reject
-- Justification:
-- Confidence & unknowns:
+- Decision: **Request Changes**
+- Justification: The original implementation contains a mathematical error and unsafe assumptions that can lead to runtime failures.
+- Confidence & unknowns: High confidence in the corrected logic; correctness depends on the stated numeric input assumption.
+
+---
