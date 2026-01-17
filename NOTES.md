@@ -37,3 +37,47 @@ def calculate_average_order_value(orders):
 
     return total / valid_count
 ```
+
+## Task 2 Assumptions and Alternatives
+
+# Notes
+
+## Assumptions
+
+- Email validation is intended to be lightweight and pragmatic rather than fully RFC 5322 compliant.
+- Input is expected to be a list containing email-like values, though non-string entries may appear and should be ignored safely.
+- The function’s responsibility is limited to structural validation, not deliverability or domain verification.
+
+## Known Limitations
+
+- The selected regular expression does not support rare but valid RFC edge cases such as quoted local parts or internationalized domain names.
+
+## Alternative Approach Considered
+
+A stricter regular expression was considered to prevent leading or trailing dots in the local part and to enforce a clearer subdomain structure:
+
+```python
+import re
+
+EMAIL_REGEX = re.compile(
+    r"^(?!\.)[A-Za-z0-9._%+-]+(?<!\.)@"
+    r"(?:[A-Za-z0-9-]+\.)+[A-Za-z]{2,}$"
+)
+
+def count_valid_emails(emails):
+    if not emails:
+        return 0
+
+    count = 0
+
+    for email in emails:
+        if not isinstance(email, str):
+            continue
+
+        email = email.strip()
+
+        if EMAIL_REGEX.match(email):
+            count += 1
+
+    return count
+```

@@ -3,7 +3,7 @@
 ## Candidate
 
 - Name: Kiya Kebe
-- Approximate time spent: 40 Min
+- Approximate time spent: 75 Min
 
 ---
 
@@ -48,8 +48,6 @@
 ### Corrected code
 
 See `correct_task1.py`
-
-> Note: The original AI-generated code is preserved in `task1.py`.
 
 ### Testing Considerations
 
@@ -97,31 +95,46 @@ See `correct_task1.py`
 
 ### Critical bugs
 
--
+- The original implementation classifies any string containing `@` as a valid email, which is fundamentally incorrect.
+- It does not verify the presence of a domain, top-level domain, or proper structure.
 
 ### Edge cases & risks
 
--
+- Non-string inputs can raise runtime errors.
+- Whitespace around email strings is not handled.
+- Invalid formats such as `"@"`, `"user@"`, or `"@domain.com"` are incorrectly counted as valid.
+- Overly permissive validation may allow malformed addresses.
 
 ### Code quality / design issues
 
--
+- Function behavior does not match its name or documented intent.
+- Validation logic is oversimplified and misleading.
+- Email verification is not centralized or reusable.
+
+---
 
 ## 2) Proposed Fixes / Improvements
 
 ### Summary of changes
 
--
+- Introduced a compiled regular expression to validate basic email structure.
+- Stripped whitespace from inputs before validation.
+- Safely ignored non-string entries.
+- Ensured behavior matches the documented purpose of counting valid email addresses.
 
 ### Corrected code
 
 See `correct_task2.py`
 
-> Note: The original AI-generated code is preserved in `task2.py`.
-
 ### Testing Considerations
 
-If you were to test this function, what areas or scenarios would you focus on, and why?
+- Empty input list to confirm safe default behavior.
+- Mixed valid and invalid email formats.
+- Inputs containing leading or trailing whitespace.
+- Non-string entries such as `None` or integers.
+- Boundary cases like minimal valid emails and long domain names.
+
+---
 
 ## 3) Explanation Review & Rewrite
 
@@ -131,17 +144,21 @@ If you were to test this function, what areas or scenarios would you focus on, a
 
 ### Issues in original explanation
 
--
+- Overstates correctness of validation.
+- Does not describe how validity is determined.
+- Implies safety guarantees that were not present in the original implementation.
 
 ### Rewritten explanation
 
--
+- This function counts email addresses that match a basic structural validation rule using a regular expression. It trims whitespace, ignores non-string inputs, and safely handles empty lists without raising errors.
+
+---
 
 ## 4) Final Judgment
 
-- Decision: Approve / Request Changes / Reject
-- Justification:
-- Confidence & unknowns:
+- Decision: **Request Changes**
+- Justification: The original implementation fails to perform meaningful email validation and does not meet its stated intent.
+- Confidence & unknowns: High confidence in the fixes; full RFC-compliant email validation is intentionally out of scope.
 
 ---
 
@@ -170,8 +187,6 @@ If you were to test this function, what areas or scenarios would you focus on, a
 ### Corrected code
 
 See `correct_task3.py`
-
-> Note: The original AI-generated code is preserved in `task3.py`.
 
 ### Testing Considerations
 
